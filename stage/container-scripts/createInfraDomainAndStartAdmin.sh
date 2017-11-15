@@ -178,9 +178,9 @@ then
      fi
 
      # Create the security file to start the server(s) without the password prompt
-     mkdir -p ${DOMAIN_HOME}/servers/AdminServer/security/ 
-     echo "username=weblogic" > ${DOMAIN_HOME}/servers/AdminServer/security/boot.properties 
-     echo "password=$ADMIN_PASSWORD" >> ${DOMAIN_HOME}/servers/AdminServer/security/boot.properties 
+    #  mkdir -p ${DOMAIN_HOME}/servers/AdminServer/security/ 
+    #  echo "username=weblogic" > ${DOMAIN_HOME}/servers/AdminServer/security/boot.properties 
+    #  echo "password=$ADMIN_PASSWORD" >> ${DOMAIN_HOME}/servers/AdminServer/security/boot.properties 
 
      mkdir -p ${DOMAIN_HOME}/servers/AdminServer/data/nodemanager
      echo "Arguments=-Djava.security.egd=file:/dev/./urandom" >> ${DOMAIN_HOME}/servers/AdminServer/data/nodemanager/serverup.properties
@@ -190,7 +190,7 @@ fi
 
 echo "Starting the Node Manager"
 echo "=========================="
-nohup ${DOMAIN_HOME}/bin/starNodeManager.sh &
+nohup ${DOMAIN_HOME}/bin/startNodeManager.sh &
 
 echo "Starting the Admin Server"
 echo "=========================="

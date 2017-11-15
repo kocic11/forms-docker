@@ -30,12 +30,12 @@ MAINTAINER KOCIC
 # Common environment variables required for this build 
 # ----------------------------------------------------
 ENV ORACLE_HOME=/u01/oracle \
-    SCRIPT_FILE=/u01/oracle/container-scripts/* \
+    SCRIPT_FILE=${ORACLE_HOME}/container-scripts/* \
     USER_MEM_ARGS="-Djava.security.egd=file:/dev/./urandom" \
     DOMAIN_NAME="${DOMAIN_NAME:-InfraDomain}" \
-    DOMAIN_HOME=/u01/oracle/user_projects/domains/${DOMAIN_NAME:-InfraDomain} \
-    VOLUME_DIR=/u01/oracle/user_projects \
-    PATH=$PATH:/usr/java/default/bin:/u01/oracle/oracle_common/common/bin:/u01/oracle/wlserver/common/bin:/u01/oracle/container-scripts
+    DOMAIN_HOME=${ORACLE_HOME}/user_projects/domains/${DOMAIN_NAME:-InfraDomain} \
+    VOLUME_DIR=${ORACLE_HOME}/user_projects \
+    PATH=$PATH:/usr/java/default/bin:${ORACLE_HOME}/oracle_common/common/bin:${ORACLE_HOME}/wlserver/common/bin:${ORACLE_HOME}/container-scripts
 
 
 #USER root    
@@ -44,7 +44,7 @@ ENV ORACLE_HOME=/u01/oracle \
 USER root
 # Copy packages and scripts
 # -------------
-COPY container-scripts/* /u01/oracle/container-scripts/
+COPY container-scripts/* ${ORACLE_HOME}/container-scripts/
 
 # Environment variables required for this build (do NOT change)
 # -------------------------------------------------------------
@@ -94,11 +94,11 @@ USER oracle
 RUN cd /u01/ && \
     unzip -o $FMW_PKG1 && \
     unzip -o $FMW_PKG2 && \
-    ./$FMW_BIN -silent -responseFile /u01/install.file -invPtrLoc /u01/oraInst.loc -jreLoc $JAVA_HOME -ignoreSysPrereqs -force -novalidation \
-    ORACLE_HOME=$ORACLE_HOME INSTALL_TYPE="Forms and Reports" && \
+    ./$FMW_BIN -silent -responseFile /u01/install.file -invPtrLoc /u01/oraInst.loc -jreLoc $JAVA_HOME -force \
+    ORACLE_HOME=$ORACLE_HOME INSTALL_TYPE="Forms and Reports Deployment" && \
     rm /u01/$FMW_PKG1 /u01/oraInst.loc /u01/install.file
 
-WORKDIR ${ORACLE_HOME}/container-scripts
+WORKDIR ${ORACLE_HOME}
 
 # Define default command to start script.
 CMD ["/u01/oracle/container-scripts/createInfraDomainAndStartAdmin.sh"]
