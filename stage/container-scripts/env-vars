@@ -1,0 +1,9 @@
+export ORACLE_HOME=/home/oracle/Oracle/Middleware/Oracle_Home
+export JAVA_HOME=/opt/java/jdk1.8.0_131
+export DOMAIN_ROOT=/home/oracle/Oracle/Middleware/Oracle_Home/user_projects/domains
+export DOMAIN_NAME=frm_domain
+export ADMIN_USER=weblogic
+export ADMIN_PASSWORD=welcome1
+export CONNECTION_STRING=192.168.0.23:1527/pdb1.localdomain
+export RCUPREFIX=DEV
+export DB_SCHEMA_PASSWORD=welcome1
