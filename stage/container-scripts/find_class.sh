@@ -9,9 +9,7 @@ fi
 
 for file in $(find . -type f -name *.jar)
 do
-    printf "File: '%s'\n" $file
-    res=$(jar -tf $file | grep "$1")
-   	if [[ $res ]]; then
+   	if [[ $(jar -tf $file 2>/dev/null | grep "$1") ]]; then
        printf "File: '%s'\n" $file
     fi
 done
