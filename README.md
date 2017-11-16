@@ -2,7 +2,8 @@
 HOW TO BUILD THIS IMAGE
 -----------------------
 The Oracle Forms and Reports image extends the FMW Infrastructure 12.2.1.3 image.
-Build: 
+
+Build:
 docker build --force-rm=true --no-cache=true -t akocic/forms:12.2.1.3 -f Dockerfile .
 
 Run:
