@@ -1,14 +1,6 @@
-#Copyright (c) 2014-2017 Oracle and/or its affiliates. All rights reserved.
-#
-# Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
-#
-# ORACLE DOCKERFILES PROJECT
-# --------------------------
-# This is the Dockerfile for Oracle FMW Infrastructure 12.2.1.3
-# 
 # HOW TO BUILD THIS IMAGE
 # -----------------------
-# The Oracle FMW Infrastructure image extends the Oracle WebLogic Infrastructure 12.2.1.3 image, you must first build the Oracle WebLogic Infrastructure image.
+# The Oracle Forms and Reports image extends the FMW Infrastructure 12.2.1.3 image.
 # Run: 
 #      $ docker build --force-rm=true --no-cache=true -t akocic/forms:12.2.1.3 -f Dockerfile .
 #      $ docker run -d -p 7001:7001 -p 9002:9002 -p 9001:9001 -p 8080:8080 -p 443:443 -v /vagrant/stage:/u01/oracle/user_projects --name formsadmin --env-file ./infraDomain.env.list akocic/forms:12.2.1.3
@@ -16,7 +8,7 @@
 #
 # IMPORTANT
 # ---------
-# The resulting image of this Dockerfile contains a FMW Infra Base Domain.
+# The resulting image of this Dockerfile contains Forms and Reports Domain.
 #
 # From 
 # -------------------------
@@ -24,7 +16,7 @@ FROM oracle/fmw-infrastructure:12.2.1.3
 
 # Maintainer
 # ----------
-MAINTAINER KOCIC
+MAINTAINER Kocic
 
 
 # Common environment variables required for this build 
@@ -52,7 +44,7 @@ ENV FMW_PKG1=fmw_12.2.1.3.0_fr_linux64_Disk1_1of2.zip \
     FMW_PKG2=fmw_12.2.1.3.0_fr_linux64_Disk1_2of2.zip \
     FMW_BIN=fmw_12.2.1.3.0_fr_linux64.bin
 
-# Copy packages
+# Copy binaries and install required packages
 # -------------
 COPY $FMW_PKG1 $FMW_PKG2 install.file oraInst.loc /u01/
 RUN sed -i 's|securerandom.source=file:/dev/random|securerandom.source=file:/dev/urandom|' $JAVA_HOME/jre/lib/security/java.security && \
@@ -102,4 +94,4 @@ RUN cd /u01/ && \
 WORKDIR ${ORACLE_HOME}
 
 # Define default command to start script.
-CMD ["/u01/oracle/container-scripts/createInfraDomainAndStartAdmin.sh"]
+CMD ["container-scripts/createInfraDomainAndStartAdmin.sh"]
