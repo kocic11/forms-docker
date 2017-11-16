@@ -126,7 +126,7 @@ class FrmProvisioner:
         self.createOhs(domainName, domainParentDir, domainUser, domainPassword)
         self.createReportComponents('reportsToolsInstance1', 'machine1', 'reportsServerInstance1', 'machine1')
         self.deleteDefaultServers(domainUser, domainPassword)
-        self.shutdownAdminserverAndNM()
+        self.shutdownAdminserverAndNM(domainUser, domainPassword)
 
     def createBaseDomain(self, name, user, password, domainType):
         baseTemplate = self.replaceTokens(
@@ -397,8 +397,7 @@ class FrmProvisioner:
             self.createBootPropertiesFile(
                 domainHome, domainUser, domainPassword)
             print "Starting Admin server ..."
-            properties = makePropertiesObject("Arguments=-Djava.security.egd=file:/dev/./urandom")
-            nmStart('AdminServer', props=properties)
+            nmStart('AdminServer')
             
             adminHost = self.SERVERS['AdminServer']['ListenAddress']
             adminPort = self.SERVERS['AdminServer']['ListenPort']
@@ -425,7 +424,8 @@ class FrmProvisioner:
         activate()
         disconnect()
 
-    def shutdownAdminserverAndNM(self):
+    def shutdownAdminserverAndNM(self, domainUser, domainPassword):
+        connect(domainUser, domainPassword)
         shutdown('AdminServer', force='true', block='true')
         stopNodeManager()
 

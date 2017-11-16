@@ -177,14 +177,6 @@ then
          exit
      fi
 
-     # Create the security file to start the server(s) without the password prompt
-    #  mkdir -p ${DOMAIN_HOME}/servers/AdminServer/security/ 
-    #  echo "username=weblogic" > ${DOMAIN_HOME}/servers/AdminServer/security/boot.properties 
-    #  echo "password=$ADMIN_PASSWORD" >> ${DOMAIN_HOME}/servers/AdminServer/security/boot.properties 
-
-     mkdir -p ${DOMAIN_HOME}/servers/AdminServer/data/nodemanager
-     echo "Arguments=-Djava.security.egd=file:/dev/./urandom" >> ${DOMAIN_HOME}/servers/AdminServer/data/nodemanager/serverup.properties
-
      ${DOMAIN_HOME}/bin/setDomainEnv.sh 
 fi
 

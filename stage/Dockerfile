@@ -55,7 +55,8 @@ ENV FMW_PKG1=fmw_12.2.1.3.0_fr_linux64_Disk1_1of2.zip \
 # Copy packages
 # -------------
 COPY $FMW_PKG1 $FMW_PKG2 install.file oraInst.loc /u01/
-RUN chown oracle:oracle -R /u01 && \
+RUN sed -i 's|securerandom.source=file:/dev/random|securerandom.source=file:/dev/urandom|' $JAVA_HOME/jre/lib/security/java.security && \
+    chown oracle:oracle -R /u01 && \
     chmod +xr $SCRIPT_FILE && \
     yum -y install\
         compat-libcap1\
