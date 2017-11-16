@@ -16,7 +16,7 @@ FROM oracle/fmw-infrastructure:12.2.1.3
 
 # Maintainer
 # ----------
-MAINTAINER Kocic
+LABEL maintainer="akocic"
 
 
 # Common environment variables required for this build 
