@@ -7,7 +7,7 @@ print host_name
 url='t3://' + host_name + ':7001'	
 
 if (host_name == ""):
-	pritn("Host name is not properly set.")
+	print("Host name is not properly set.")
 	exit(0)
 	
 try:
