@@ -18,7 +18,7 @@ FROM oracle/fmw-infrastructure:12.2.1.3
 #
 # Maintainer
 # ----------
-MAINTAINER Prashanth Nagaraja <prashanth.nagaraja@oracle.com>
+LABEL MAINTAINER="akocic"
 #
 # Environment variables required for this build (do NOT change)
 # -------------------------------------------------------------
@@ -36,8 +36,10 @@ RUN cd /u01 && chmod 755 *.jar && chmod a+xr /u01/oracle/dockertools/*.*
 USER oracle
 COPY install/* /u01/
 RUN cd /u01 && \
-  $JAVA_HOME/bin/java -jar $FMW_JAR1 -silent -responseFile /u01/soasuite.response -invPtrLoc /u01/oraInst.loc -jreLoc $JAVA_HOME -ignoreSysPrereqs -force -novalidation ORACLE_HOME=$ORACLE_HOME && \
-  $JAVA_HOME/bin/java -jar $FMW_JAR2 -silent -responseFile /u01/soasuite.response -invPtrLoc /u01/oraInst.loc -jreLoc $JAVA_HOME -ignoreSysPrereqs -force -novalidation ORACLE_HOME=$ORACLE_HOME INSTALL_TYPE="Service Bus" && \
+  $JAVA_HOME/bin/java -jar $FMW_JAR1 -silent -responseFile /u01/soasuite.response -invPtrLoc /u01/oraInst.loc -jreLoc $JAVA_HOME -force ORACLE_HOME=$ORACLE_HOME \
+  INSTALL_TYPE="SOA Suite" && \
+  $JAVA_HOME/bin/java -jar $FMW_JAR2 -silent -responseFile /u01/soasuite.response -invPtrLoc /u01/oraInst.loc -jreLoc $JAVA_HOME -force ORACLE_HOME=$ORACLE_HOME \
+  INSTALL_TYPE="Service Bus" && \
   rm -fr /u01/*.jar /u01/*.response /u01/*.loc
 
 #
