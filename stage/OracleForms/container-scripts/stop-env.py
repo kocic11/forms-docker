@@ -13,31 +13,18 @@ try:
 
 	cd('/Clusters')
 	for cluster in cmo.getClusters():	
-		cluster_name = cluster.getName()
-		if env.match(env.PATTERN, cluster_name):
-			try:
-				shutdown(cluster_name, force='true', block='true')
-			except:
-				print 'Stopping cluster', cluster_name, 'failed:', sys.exc_info()[0]
+		env.stop(cluster.getName())
 
 	cd('/Servers')
 	for server in cmo.getServers():
 		server_name = server.getName()
 		if server_name != env.ADMIN_SERVER_NAME:
-			if env.match(env.PATTERN, server_name):
-				try:
-					shutdown(server_name, force='true', block='true') 
-				except:
-					print 'Stopping server', server_name, 'failed:', sys.exc_info()[0]
+			env.stop(server_name)
 
 	cd('/SystemComponents')
 	for component in cmo.getSystemComponents():
-		component_name = component.getName()
-		if env.match(env.PATTERN, component_name):
-			try:
-				shutdown(component_name, force='true', block='true') 
-			except:
-				print 'Stopping component', component_name, 'failed:', sys.exc_info()[0]
+		env.stop(component.getName())
+
 	# Stop Admin Server
 	if env.match(env.PATTERN, env.ADMIN_SERVER_NAME):
 		try:
@@ -46,6 +33,5 @@ try:
 			print 'Stopping server', env.ADMIN_SERVER_NAME, 'failed:', sys.exc_info()[0]
 except:
 	print "Unexpected error:", sys.exc_info()[0]
-	pass
 	
 exit()
