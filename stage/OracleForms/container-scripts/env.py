@@ -27,15 +27,15 @@ def match(pattern, name):
 	return True
 
 def start(name):
-    if env.match(env.PATTERN, name):
+    if match(PATTERN, name):
 		try:
 			start(name, block='true')
 		except:
 			print 'Starting', name, 'failed:', sys.exc_info()[0]
 
 def stop(name):
-	if env.match(env.PATTERN, name):
-    	try:
+	if match(PATTERN, name):
+	    	try:
 			shutdown(name, force='true', block='true') 
 		except:
 			print 'Stopping', name, 'failed:', sys.exc_info()[0]
