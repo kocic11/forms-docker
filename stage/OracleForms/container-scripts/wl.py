@@ -4,6 +4,30 @@
 # could cause your scripts to fail when you upgrade to a different version.
 # Copyright (c) 2004,2016, Oracle and/or its affiliates. All rights reserved.
 
+# To import WLST as a Jython module:
+
+# Invoke WLST.
+# c:\>java weblogic.WLST
+# wls:/(offline)>
+
+# Use the writeIniFile command to convert WLST definitions and method declarations to a .py file.
+# wls:/(offline)> writeIniFile("wl.py")
+# The Ini file is successfully written to wl.py
+# wls:/(offline)>
+
+# Open a new command shell and invoke Jython directly by entering the following command:
+# c:\>java org.python.util.jython
+
+# The Jython package manager processes the JAR files in your classpath. The Jython prompt appears:
+
+# >>>
+
+# Import the WLST module into your Jython module using the Jython import command.
+# >>>import wl
+
+# Now you can use WLST methods in the module. For example, to connect WLST to a server instance:
+# wl.connect('username','password')
+
 """
 This is WLST Module that a user can import into other Jython Modules
 
