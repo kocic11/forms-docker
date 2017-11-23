@@ -19,8 +19,8 @@ try:
         try:
             shutdown(env.ADMIN_SERVER_NAME, force='true', block='true') 
         except:
-            print 'Stopping', env.ADMIN_SERVER_NAME, 'failed:', sys.exc_info()[0]
+            print 'Stopping', env.ADMIN_SERVER_NAME, 'failed:', sys.exc_info()[0], sys.exc_info()[1]
 except:
-    print 'Unexpected error:', sys.exc_info()[0]
+    print 'Unexpected error:', sys.exc_info()[0], sys.exc_info()[1]
     
 exit()

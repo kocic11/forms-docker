@@ -20,8 +20,8 @@ NM_TYPE = os.getenv('NM_TYPE', 'SSL')
 HOST_NAME = 'localhost'  # socket.gethostbyname(socket.gethostname())
 
 # Admin server
-ADMIN_PORT = os.getenv('ADMIN_PORT', '7001')
-ADMIN_URL = 't3://' + HOST_NAME + ':' + ADMIN_PORT
+ADMIN_PORT = os.getenv('ADMIN_PORT', '7002')
+ADMIN_URL = 't3s://' + HOST_NAME + ':' + ADMIN_PORT
 ADMIN_SERVER_NAME = os.getenv('ADMIN_SERVER_NAME', 'AdminServer')
 
 ###########################################################################
@@ -41,10 +41,14 @@ def start(pattern):
     for name in getNames(pattern):
         try:
             wl.start(name, block='true')
+        except wl.NMException, e:
+            pass
+        except wl.ScriptException, e:
+            pass
         except wl.WLSTException, e:
             pass
         except:
-            print 'Starting', name, 'failed:', sys.exc_info()[0]
+            print 'Starting', name, 'failed:', sys.exc_info()[0], sys.exc_info()[1] 
 
 def stop(pattern):
     for name in getNames(pattern):
@@ -53,7 +57,7 @@ def stop(pattern):
         except wl.WLSTException, e:
             pass
         except:
-            print 'Stopping', name, 'failed:', sys.exc_info()[0]
+            print 'Stopping', name, 'failed:', sys.exc_info()[0], sys.exc_info()[1]
 
 def getNames(pattern):
     wl.cd('/Clusters')

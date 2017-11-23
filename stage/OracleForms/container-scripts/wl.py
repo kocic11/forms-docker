@@ -33,6 +33,8 @@ This is WLST Module that a user can import into other Jython Modules
 
 """
 from weblogic.management.scripting.utils import WLSTUtil
+from weblogic.management.scripting import ScriptException
+from weblogic.nodemanager import NMException
 import sys
 origPrompt = sys.ps1
 key = 'WLSTMODULE'
