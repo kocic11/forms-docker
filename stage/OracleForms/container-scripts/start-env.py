@@ -10,6 +10,7 @@ if (env.HOST_NAME == ''):
     exit(0)
 
 pattern = env.getPattern()
+print pattern
 
 try:
     if env.match(pattern, env.ADMIN_SERVER_NAME):

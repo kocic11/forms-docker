@@ -3,6 +3,7 @@ import os
 import re
 import sys
 import wl
+from sets import Set
 
 # Domain
 DOMAIN_NAME = os.getenv('DOMAIN_NAME', 'forms')
@@ -20,8 +21,8 @@ NM_TYPE = os.getenv('NM_TYPE', 'SSL')
 HOST_NAME = 'localhost'  # socket.gethostbyname(socket.gethostname())
 
 # Admin server
-ADMIN_PORT = os.getenv('ADMIN_PORT', '7002')
-ADMIN_URL = 't3s://' + HOST_NAME + ':' + ADMIN_PORT
+ADMIN_PORT = os.getenv('ADMIN_PORT', '7001')
+ADMIN_URL = 't3://' + HOST_NAME + ':' + ADMIN_PORT
 ADMIN_SERVER_NAME = os.getenv('ADMIN_SERVER_NAME', 'AdminServer')
 
 ###########################################################################
@@ -34,39 +35,49 @@ def getPattern():
     return ''
 
 def match(pattern, name):
-    return re.compile(pattern).match(name)
+    matchObject = re.compile(pattern).match(name)
+    if matchObject != None and matchObject.group(0) != '':
+        return True
+    return False
 
 
 def start(pattern):
-    for name in getNames(pattern):
-        try:
-            wl.start(name, block='true')
-        except wl.NMException, e:
-            pass
-        except wl.ScriptException, e:
-            pass
-        except wl.WLSTException, e:
-            pass
-        except:
-            print 'Starting', name, 'failed:', sys.exc_info()[0], sys.exc_info()[1] 
+    for nameState in getNameState(pattern):
+        nameStateList = nameState.split(':')
+        if nameStateList[1] != 'RUNNING':
+            try:
+                wl.start(nameStateList[0], block='true')
+            except:
+                print 'Starting', nameStateList[0], 'failed:', sys.exc_info()[0], sys.exc_info()[1] 
 
 def stop(pattern):
-    for name in getNames(pattern):
-        try:
-            wl.shutdown(name, force='true', block='true')
-        except wl.WLSTException, e:
-            pass
-        except:
-            print 'Stopping', name, 'failed:', sys.exc_info()[0], sys.exc_info()[1]
+    for nameState in getNameState(pattern):
+        nameStateList = nameState.split(':')
+        if nameStateList[1] == 'RUNNING':
+            try:
+                wl.shutdown(nameStateList[0], force='true', block='true')
+            except:
+                print 'Stopping', nameStateList[0], 'failed:', sys.exc_info()[0], sys.exc_info()[1]
 
-def getNames(pattern):
+def getNameState(pattern):
+    names = []
     wl.cd('/Clusters')
-    names = [cluster.getName() for cluster in wl.cmo.getClusters() if match(pattern, cluster.getName())]
-
-    wl.cd('/Servers')
-    names.extend([server.getName() for server in wl.cmo.getServers() if match(pattern, server.getName()) and server.getName() != ADMIN_SERVER_NAME])
-
-    wl.cd('/SystemComponents')
-    names.extend([component.getName() for component in wl.cmo.getSystemComponents() if match(pattern, component.getName())])
+    for cluster in wl.cmo.getClusters():
+        if match(pattern, cluster.getName()):
+            for server in cluster.getServers():
+                wl.domainRuntime()   
+                wl.cd('/ServerLifeCycleRuntimes')
+                names.append(server.getName() + ':' + wl.cmo.lookupServerLifeCycleRuntime(server.getName()).getState())
     
+    wl.domainRuntime()   
+
+    wl.cd('/ServerLifeCycleRuntimes')
+    names.extend([server.getName() + ':' + server.getState() for server in wl.cmo.getServerLifeCycleRuntimes() if match(pattern, server.getName()) 
+        and server.getName() != ADMIN_SERVER_NAME])      
+    
+    wl.cd('/SystemComponentLifeCycleRuntimes')
+    names.extend([component.getName() + ':' + component.getState() for component in wl.cmo.getSystemComponentLifeCycleRuntimes() if match(pattern, component.getName())])
+    
+    names = list(Set(names))
+    print 'Names and states:', names
     return names
