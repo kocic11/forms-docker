@@ -420,7 +420,7 @@ class FrmProvisioner:
                 managedServer.setCluster(None)
                 managedServer.setMachine(None)
                 delete(managedServer.getName(), 'Server')
-	
+    
         activate()
         disconnect()
 
